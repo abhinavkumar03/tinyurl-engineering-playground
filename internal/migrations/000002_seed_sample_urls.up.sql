@@ -1,0 +1,21 @@
+INSERT INTO urls (
+    original_url,
+    short_code,
+    click_count
+)
+VALUES
+(
+    'https://golang.org',
+    'go1',
+    0
+),
+(
+    'https://gin-gonic.com',
+    'gin1',
+    0
+),
+(
+    'https://redis.io',
+    'redis1',
+    0
+);
