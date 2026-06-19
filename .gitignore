@@ -1,0 +1,60 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Coverage
+*.out
+coverage.out
+
+# Build output
+bin/
+dist/
+build/
+
+# Go workspace
+go.work.sum
+
+# Vendor (ignore only if not committed)
+vendor/
+
+
+.env
+.env.*
+!.env.example
+
+
+*.log
+logs/
+
+
+tmp/
+temp/
+
+
+.vscode/
+.idea/
+
+
+.DS_Store
+Thumbs.db
+
+
+docker-compose.override.yml
+
+# Docker volumes/data
+docker-data/
+postgres-data/
+mysql-data/
+redis-data/
+
+# Local Docker secrets
+*.pem
+*.key
+secrets/
+
+
+*.generated.go
