@@ -5,6 +5,10 @@ import (
 
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/config"
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/database"
+	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/handler"
+	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/repository"
+	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/router"
+	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/service"
 )
 
 func main() {
@@ -32,8 +36,24 @@ func main() {
 		panic(err)
 	}
 
-	defer pg.Close()
-	defer redisClient.Close()
+	urlRepository := repository.NewURLRepository(pg)
 
-	fmt.Println("application started")
+	urlService := service.NewURLService(
+		urlRepository,
+		redisClient,
+		cfg.BaseURL,
+	)
+
+	urlHandler := handler.NewURLHandler(
+		urlService,
+		cfg.BaseURL,
+	)
+
+	r := router.Setup(urlHandler)
+
+	if err := r.Run(
+		":" + cfg.ServerPort,
+	); err != nil {
+		panic(err)
+	}
 }
