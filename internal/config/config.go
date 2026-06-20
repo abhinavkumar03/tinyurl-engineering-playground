@@ -1,13 +1,13 @@
 package config
 
 import (
-	"log"
 	"os"
 
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
+	BaseURL    string
 	ServerPort string
 
 	PostgresHost string
@@ -25,6 +25,7 @@ func Load() *Config {
 	_ = godotenv.Load()
 
 	return &Config{
+		BaseURL:    os.Getenv("BASE_URL"),
 		ServerPort: os.Getenv("SERVER_PORT"),
 
 		PostgresHost: os.Getenv("POSTGRES_HOST"),
