@@ -2,7 +2,6 @@ package router
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/dto"
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/handler"
@@ -12,16 +11,13 @@ import (
 
 func Setup(
 	urlHandler *handler.URLHandler,
+	frontendURLs []string,
 ) *gin.Engine {
 
 	r := gin.New()
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins: []string{
-			"http://localhost:3000",
-			"http://localhost:5173",
-			"https://your-frontend.onrender.com",
-		},
+		AllowOrigins: frontendURLs,
 		AllowMethods: []string{
 			"GET",
 			"POST",
@@ -36,7 +32,6 @@ func Setup(
 			"Authorization",
 		},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
 	}))
 
 	r.GET(
