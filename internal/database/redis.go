@@ -7,11 +7,14 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func NewRedis(addr string) (*redis.Client, error) {
+func NewRedis(redisURL string) (*redis.Client, error) {
 
-	client := redis.NewClient(&redis.Options{
-		Addr: addr,
-	})
+	opts, err := redis.ParseURL(redisURL)
+	if err != nil {
+		return nil, err
+	}
+
+	client := redis.NewClient(opts)
 
 	if err := client.Ping(context.Background()).Err(); err != nil {
 		return nil, err
