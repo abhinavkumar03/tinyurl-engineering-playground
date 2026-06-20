@@ -30,7 +30,7 @@ func main() {
 	}
 
 	redisClient, err := database.NewRedis(
-		cfg.RedisHost + ":" + cfg.RedisPort,
+		cfg.RedisURL,
 	)
 	if err != nil {
 		panic(err)
