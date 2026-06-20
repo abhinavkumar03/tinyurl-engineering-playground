@@ -49,7 +49,7 @@ func main() {
 		cfg.BaseURL,
 	)
 
-	r := router.Setup(urlHandler)
+	r := router.Setup(urlHandler, cfg.FrontendURL)
 
 	if err := r.Run(
 		":" + cfg.ServerPort,

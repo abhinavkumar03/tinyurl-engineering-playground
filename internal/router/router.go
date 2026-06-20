@@ -12,15 +12,14 @@ import (
 
 func Setup(
 	urlHandler *handler.URLHandler,
+	frontendURL string,
 ) *gin.Engine {
 
 	r := gin.New()
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
-			"http://localhost:3000",
-			"http://localhost:5173",
-			"https://your-frontend.onrender.com",
+			frontendURL,
 		},
 		AllowMethods: []string{
 			"GET",

@@ -7,8 +7,9 @@ import (
 )
 
 type Config struct {
-	BaseURL    string
-	ServerPort string
+	BaseURL     string
+	ServerPort  string
+	FrontendURL string
 
 	PostgresHost string
 	PostgresPort string
@@ -24,8 +25,9 @@ func Load() *Config {
 	_ = godotenv.Load()
 
 	return &Config{
-		BaseURL:    os.Getenv("BASE_URL"),
-		ServerPort: os.Getenv("SERVER_PORT"),
+		BaseURL:     os.Getenv("BASE_URL"),
+		ServerPort:  os.Getenv("SERVER_PORT"),
+		FrontendURL: os.Getenv("FRONTEND_URL"),
 
 		PostgresHost: os.Getenv("POSTGRES_HOST"),
 		PostgresPort: os.Getenv("POSTGRES_PORT"),
