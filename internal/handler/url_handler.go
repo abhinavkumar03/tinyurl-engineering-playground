@@ -9,12 +9,12 @@ import (
 )
 
 type URLHandler struct {
-	service *service.URLService
+	service service.URLService
 	baseURL string
 }
 
 func NewURLHandler(
-	service *service.URLService,
+	service service.URLService,
 	baseURL string,
 ) *URLHandler {
 

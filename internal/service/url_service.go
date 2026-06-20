@@ -10,26 +10,26 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type URLService struct {
-	repository *repository.URLRepository
+type URLServiceImpl struct {
+	repository repository.URLRepository
 	redis      *redis.Client
 	baseURL    string
 }
 
 func NewURLService(
-	repository *repository.URLRepository,
+	repository repository.URLRepository,
 	redis *redis.Client,
 	baseURL string,
-) *URLService {
+) *URLServiceImpl {
 
-	return &URLService{
+	return &URLServiceImpl{
 		repository: repository,
 		redis:      redis,
 		baseURL:    baseURL,
 	}
 }
 
-func (s *URLService) Create(
+func (s *URLServiceImpl) Create(
 	ctx context.Context,
 	originalURL string,
 ) (*model.URL, error) {
@@ -57,7 +57,7 @@ func (s *URLService) Create(
 	return url, nil
 }
 
-func (s *URLService) Resolve(
+func (s *URLServiceImpl) Resolve(
 	ctx context.Context,
 	shortCode string,
 ) (string, error) {
@@ -93,7 +93,7 @@ func (s *URLService) Resolve(
 	return url.OriginalURL, nil
 }
 
-func (s *URLService) Get(
+func (s *URLServiceImpl) Get(
 	ctx context.Context,
 	shortCode string,
 ) (*model.URL, error) {
