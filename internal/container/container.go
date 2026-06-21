@@ -20,6 +20,8 @@ type Container struct {
 
 	URLHandler    *handler.URLHandler
 	HealthHandler *handler.HealthHandler
+
+	AnalyticsService service.AnalyticsService
 }
 
 func Build() (*Container, error) {
@@ -74,11 +76,21 @@ func Build() (*Container, error) {
 		healthService,
 	)
 
+	analyticsRepository := repository.NewAnalyticsRepository(
+		pg,
+	)
+
+	analyticsService := service.NewAnalyticsService(
+		analyticsRepository,
+		urlRepository,
+	)
+
 	return &Container{
-		Config:        cfg,
-		Postgres:      pg,
-		Redis:         redisClient,
-		URLHandler:    urlHandler,
-		HealthHandler: healthHandler,
+		Config:           cfg,
+		Postgres:         pg,
+		Redis:            redisClient,
+		URLHandler:       urlHandler,
+		HealthHandler:    healthHandler,
+		AnalyticsService: analyticsService,
 	}, nil
 }
