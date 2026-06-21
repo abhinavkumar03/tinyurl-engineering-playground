@@ -5,6 +5,7 @@ import (
 
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/dto"
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/handler"
+	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -15,6 +16,14 @@ func Setup(
 ) *gin.Engine {
 
 	r := gin.New()
+
+	r.Use(
+		middleware.RequestID(),
+		middleware.Logger(),
+		middleware.Recovery(),
+		middleware.CORS(),
+		middleware.SecurityHeaders(),
+	)
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins: frontendURLs,

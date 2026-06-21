@@ -1,12 +1,22 @@
 package logger
 
 import (
-	"log"
+	"log/slog"
 	"os"
 )
 
-var Logger = log.New(
-	os.Stdout,
-	"",
-	log.LstdFlags|log.Lshortfile,
-)
+var Log *slog.Logger
+
+func Init() {
+
+	handler := slog.NewJSONHandler(
+		os.Stdout,
+		&slog.HandlerOptions{
+			Level: slog.LevelInfo,
+		},
+	)
+
+	Log = slog.New(handler)
+
+	slog.SetDefault(Log)
+}

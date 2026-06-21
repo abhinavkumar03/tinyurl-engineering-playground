@@ -5,9 +5,12 @@ import (
 
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/container"
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/router"
+	"github.com/abhinavkumar03/tinyurl-engineering-playground/pkg/logger"
 )
 
 func Run() error {
+
+	logger.Init()
 
 	c, err := container.Build()
 	if err != nil {

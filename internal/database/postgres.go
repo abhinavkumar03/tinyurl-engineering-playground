@@ -2,7 +2,7 @@ package database
 
 import (
 	"context"
-	"fmt"
+	"log/slog"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -18,7 +18,7 @@ func NewPostgres(conn string) (*pgxpool.Pool, error) {
 		return nil, err
 	}
 
-	fmt.Println("postgres connected")
+	slog.Info("postgres_connected")
 
 	return pool, nil
 }
