@@ -20,7 +20,7 @@ func Run() error {
 	defer c.Postgres.Close()
 	defer c.Redis.Close()
 
-	r := router.Setup(c.URLHandler, c.HealthHandler, c.Config.FrontendURLs)
+	r := router.Setup(c.URLHandler, c.HealthHandler, c.AnalyticsHandler, c.Config.FrontendURLs)
 
 	server := &http.Server{
 		Addr:    ":" + c.Config.ServerPort,

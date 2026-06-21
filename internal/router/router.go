@@ -10,6 +10,7 @@ import (
 func Setup(
 	urlHandler *handler.URLHandler,
 	healthHandler *handler.HealthHandler,
+	analyticsHandler *handler.AnalyticsHandler,
 	frontendURLs []string,
 ) *gin.Engine {
 
@@ -62,6 +63,30 @@ func Setup(
 	r.GET(
 		"/:shortCode",
 		urlHandler.Redirect,
+	)
+
+	analytics := v1.Group(
+		"/analytics",
+	)
+
+	analytics.GET(
+		"/dashboard",
+		analyticsHandler.Dashboard,
+	)
+
+	analytics.GET(
+		"/top-urls",
+		analyticsHandler.TopURLs,
+	)
+
+	analytics.GET(
+		"/:shortCode",
+		analyticsHandler.URLAnalytics,
+	)
+
+	analytics.GET(
+		"/:shortCode/daily",
+		analyticsHandler.DailyClicks,
 	)
 
 	return r

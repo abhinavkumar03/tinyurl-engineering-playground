@@ -22,6 +22,7 @@ type Container struct {
 	HealthHandler *handler.HealthHandler
 
 	AnalyticsService service.AnalyticsService
+	AnalyticsHandler *handler.AnalyticsHandler
 }
 
 func Build() (*Container, error) {
@@ -86,6 +87,10 @@ func Build() (*Container, error) {
 		healthService,
 	)
 
+	analyticsHandler := handler.NewAnalyticsHandler(
+		analyticsService,
+	)
+
 	return &Container{
 		Config:           cfg,
 		Postgres:         pg,
@@ -93,5 +98,6 @@ func Build() (*Container, error) {
 		URLHandler:       urlHandler,
 		HealthHandler:    healthHandler,
 		AnalyticsService: analyticsService,
+		AnalyticsHandler: analyticsHandler,
 	}, nil
 }
