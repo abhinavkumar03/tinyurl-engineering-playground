@@ -60,15 +60,30 @@ func (s *URLServiceImpl) Create(
 func (s *URLServiceImpl) Resolve(
 	ctx context.Context,
 	shortCode string,
-	metadata model.EventMetadata,
-) (string, error) {
+) (*model.ResolvedURL, error) {
 
 	cacheKey := "url:" + shortCode
 
-	cached, err := s.redis.Get(ctx, cacheKey).Result()
+	cached, err := s.redis.Get(
+		ctx,
+		cacheKey,
+	).Result()
 
 	if err == nil {
-		return cached, nil
+
+		url, err := s.repository.GetByShortCode(
+			ctx,
+			shortCode,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		return &model.ResolvedURL{
+			ID:          url.ID,
+			ShortCode:   url.ShortCode,
+			OriginalURL: cached,
+		}, nil
 	}
 
 	url, err := s.repository.GetByShortCode(
@@ -76,7 +91,7 @@ func (s *URLServiceImpl) Resolve(
 		shortCode,
 	)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	_ = s.redis.Set(
@@ -86,12 +101,11 @@ func (s *URLServiceImpl) Resolve(
 		time.Hour,
 	).Err()
 
-	_ = s.repository.IncrementClickCount(
-		ctx,
-		shortCode,
-	)
-
-	return url.OriginalURL, nil
+	return &model.ResolvedURL{
+		ID:          url.ID,
+		ShortCode:   url.ShortCode,
+		OriginalURL: url.OriginalURL,
+	}, nil
 }
 
 func (s *URLServiceImpl) Get(

@@ -15,8 +15,7 @@ type URLService interface {
 	Resolve(
 		ctx context.Context,
 		shortCode string,
-		metadata model.EventMetadata,
-	) (string, error)
+	) (*model.ResolvedURL, error)
 
 	Get(
 		ctx context.Context,

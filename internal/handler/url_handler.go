@@ -11,18 +11,21 @@ import (
 )
 
 type URLHandler struct {
-	service service.URLService
-	baseURL string
+	service          service.URLService
+	analyticsService service.AnalyticsService
+	baseURL          string
 }
 
 func NewURLHandler(
-	service service.URLService,
+	urlService service.URLService,
+	analyticsService service.AnalyticsService,
 	baseURL string,
 ) *URLHandler {
 
 	return &URLHandler{
-		service: service,
-		baseURL: baseURL,
+		service:          urlService,
+		analyticsService: analyticsService,
+		baseURL:          baseURL,
 	}
 }
 
@@ -66,31 +69,47 @@ func (h *URLHandler) Create(c *gin.Context) {
 	)
 }
 
-func (h *URLHandler) Redirect(c *gin.Context) {
+func (h *URLHandler) Redirect(
+	c *gin.Context,
+) {
 
-	shortCode := c.Param("shortCode")
-	ctx := c.Request.Context()
-	url, err := h.service.Resolve(
-		ctx,
+	shortCode := c.Param(
+		"shortCode",
+	)
+
+	resolvedURL, err := h.service.Resolve(
+		c.Request.Context(),
 		shortCode,
-		model.EventMetadata{
-			IPAddress: c.ClientIP(),
-			UserAgent: c.Request.UserAgent(),
-			Referrer:  c.Request.Referer(),
-		},
 	)
 
 	if err != nil {
+
 		apperrors.NotFound(
 			c,
 			"url not found",
 		)
+
 		return
 	}
 
+	_ = h.analyticsService.Track(
+		c.Request.Context(),
+		model.RedirectEvent{
+			URLID: resolvedURL.ID,
+
+			ShortCode: resolvedURL.ShortCode,
+
+			IPAddress: c.ClientIP(),
+
+			UserAgent: c.Request.UserAgent(),
+
+			Referrer: c.Request.Referer(),
+		},
+	)
+
 	c.Redirect(
 		http.StatusMovedPermanently,
-		url,
+		resolvedURL.OriginalURL,
 	)
 }
 

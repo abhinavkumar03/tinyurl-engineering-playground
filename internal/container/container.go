@@ -55,6 +55,15 @@ func Build() (*Container, error) {
 		pg,
 	)
 
+	analyticsRepository := repository.NewAnalyticsRepository(
+		pg,
+	)
+
+	analyticsService := service.NewAnalyticsService(
+		analyticsRepository,
+		urlRepository,
+	)
+
 	urlService := service.NewURLService(
 		urlRepository,
 		redisClient,
@@ -63,6 +72,7 @@ func Build() (*Container, error) {
 
 	urlHandler := handler.NewURLHandler(
 		urlService,
+		analyticsService,
 		cfg.BaseURL,
 	)
 
@@ -74,15 +84,6 @@ func Build() (*Container, error) {
 
 	healthHandler := handler.NewHealthHandler(
 		healthService,
-	)
-
-	analyticsRepository := repository.NewAnalyticsRepository(
-		pg,
-	)
-
-	analyticsService := service.NewAnalyticsService(
-		analyticsRepository,
-		urlRepository,
 	)
 
 	return &Container{
