@@ -48,6 +48,22 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+    env:
+      APP_ENV: test
+
+      SERVER_PORT: 8080
+
+      BASE_URL: http://localhost:8080
+
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: tinyurl
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+      REDIS_HOST: localhost
+      REDIS_PORT: 6379
+
     steps:
 
       - name: Checkout
@@ -61,15 +77,31 @@ jobs:
       - name: Download Dependencies
         run: go mod download
 
-      - name: Go Format Check
+      - name: Verify Formatting
         run: |
           test -z "$(gofmt -l .)"
 
-      - name: Go Vet
+      - name: Run Vet
         run: go vet ./...
 
-      - name: Run Tests
-        run: go test ./... -v
+      - name: Run Unit Tests
+        run: |
+          go test ./... \
+          -coverprofile=coverage.out \
+          -covermode=atomic
 
-      - name: Build Application
+      - name: Coverage Report
+        run: |
+          go tool cover -func=coverage.out
+
+      - name: Upload Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.out
+
+      - name: Build API
         run: go build -o tinyurl ./cmd/api
+
+      - name: Build Migration Binary
+        run: go build -o migrate ./cmd/migrate
