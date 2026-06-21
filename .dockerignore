@@ -8,16 +8,21 @@ frontend/dist
 
 tmp
 coverage
+coverage.out
 
 .env
+.env.*
 
 .idea
 .vscode
+README.md
+
+docs
 
 *.log
 
 bin
 dist
 
-Dockerfile
-docker-compose.yml
+
+.DS_Store

@@ -50,3 +50,12 @@ check:
 all:
 	make check
 	make build
+
+migrate-up:
+	go run ./cmd/migrate up
+
+migrate-down:
+	go run ./cmd/migrate down
+
+migrate-force:
+	go run ./cmd/migrate force $(VERSION)

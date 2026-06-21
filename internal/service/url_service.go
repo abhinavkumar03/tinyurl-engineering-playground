@@ -10,26 +10,26 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type URLService struct {
-	repository *repository.URLRepository
+type URLServiceImpl struct {
+	repository repository.URLRepository
 	redis      *redis.Client
 	baseURL    string
 }
 
 func NewURLService(
-	repository *repository.URLRepository,
+	repository repository.URLRepository,
 	redis *redis.Client,
 	baseURL string,
-) *URLService {
+) *URLServiceImpl {
 
-	return &URLService{
+	return &URLServiceImpl{
 		repository: repository,
 		redis:      redis,
 		baseURL:    baseURL,
 	}
 }
 
-func (s *URLService) Create(
+func (s *URLServiceImpl) Create(
 	ctx context.Context,
 	originalURL string,
 ) (*model.URL, error) {
@@ -57,17 +57,33 @@ func (s *URLService) Create(
 	return url, nil
 }
 
-func (s *URLService) Resolve(
+func (s *URLServiceImpl) Resolve(
 	ctx context.Context,
 	shortCode string,
-) (string, error) {
+) (*model.ResolvedURL, error) {
 
 	cacheKey := "url:" + shortCode
 
-	cached, err := s.redis.Get(ctx, cacheKey).Result()
+	cached, err := s.redis.Get(
+		ctx,
+		cacheKey,
+	).Result()
 
 	if err == nil {
-		return cached, nil
+
+		url, err := s.repository.GetByShortCode(
+			ctx,
+			shortCode,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		return &model.ResolvedURL{
+			ID:          url.ID,
+			ShortCode:   url.ShortCode,
+			OriginalURL: cached,
+		}, nil
 	}
 
 	url, err := s.repository.GetByShortCode(
@@ -75,7 +91,7 @@ func (s *URLService) Resolve(
 		shortCode,
 	)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	_ = s.redis.Set(
@@ -85,15 +101,14 @@ func (s *URLService) Resolve(
 		time.Hour,
 	).Err()
 
-	_ = s.repository.IncrementClickCount(
-		ctx,
-		shortCode,
-	)
-
-	return url.OriginalURL, nil
+	return &model.ResolvedURL{
+		ID:          url.ID,
+		ShortCode:   url.ShortCode,
+		OriginalURL: url.OriginalURL,
+	}, nil
 }
 
-func (s *URLService) Get(
+func (s *URLServiceImpl) Get(
 	ctx context.Context,
 	shortCode string,
 ) (*model.URL, error) {

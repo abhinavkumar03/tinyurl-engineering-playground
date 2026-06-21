@@ -52,3 +52,40 @@ h1 {
   padding: 10px 16px;
   cursor: pointer;
 }
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 1rem 2rem;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: white;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+}
+
+.navbar-links a:hover {
+  color: #2563eb;
+}
+
+.navbar-links a.active {
+  color: #2563eb;
+  font-weight: 600;
+}

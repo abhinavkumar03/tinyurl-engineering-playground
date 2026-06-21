@@ -4,23 +4,28 @@ import (
 	"net/http"
 
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/dto"
+	apperrors "github.com/abhinavkumar03/tinyurl-engineering-playground/internal/errors"
+	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/model"
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
 type URLHandler struct {
-	service *service.URLService
-	baseURL string
+	service          service.URLService
+	analyticsService service.AnalyticsService
+	baseURL          string
 }
 
 func NewURLHandler(
-	service *service.URLService,
+	urlService service.URLService,
+	analyticsService service.AnalyticsService,
 	baseURL string,
 ) *URLHandler {
 
 	return &URLHandler{
-		service: service,
-		baseURL: baseURL,
+		service:          urlService,
+		analyticsService: analyticsService,
+		baseURL:          baseURL,
 	}
 }
 
@@ -30,11 +35,9 @@ func (h *URLHandler) Create(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&request); err != nil {
 
-		c.JSON(
-			http.StatusBadRequest,
-			dto.ErrorResponse{
-				Error: err.Error(),
-			},
+		apperrors.BadRequest(
+			c,
+			err.Error(),
 		)
 
 		return
@@ -47,11 +50,9 @@ func (h *URLHandler) Create(c *gin.Context) {
 
 	if err != nil {
 
-		c.JSON(
-			http.StatusInternalServerError,
-			dto.ErrorResponse{
-				Error: err.Error(),
-			},
+		apperrors.Internal(
+			c,
+			"failed to create short url",
 		)
 
 		return
@@ -68,28 +69,47 @@ func (h *URLHandler) Create(c *gin.Context) {
 	)
 }
 
-func (h *URLHandler) Redirect(c *gin.Context) {
+func (h *URLHandler) Redirect(
+	c *gin.Context,
+) {
 
-	shortCode := c.Param("shortCode")
+	shortCode := c.Param(
+		"shortCode",
+	)
 
-	url, err := h.service.Resolve(
+	resolvedURL, err := h.service.Resolve(
 		c.Request.Context(),
 		shortCode,
 	)
 
 	if err != nil {
-		c.JSON(
-			http.StatusNotFound,
-			dto.ErrorResponse{
-				Error: "url not found",
-			},
+
+		apperrors.NotFound(
+			c,
+			"url not found",
 		)
+
 		return
 	}
 
+	_ = h.analyticsService.Track(
+		c.Request.Context(),
+		model.RedirectEvent{
+			URLID: resolvedURL.ID,
+
+			ShortCode: resolvedURL.ShortCode,
+
+			IPAddress: c.ClientIP(),
+
+			UserAgent: c.Request.UserAgent(),
+
+			Referrer: c.Request.Referer(),
+		},
+	)
+
 	c.Redirect(
 		http.StatusMovedPermanently,
-		url,
+		resolvedURL.OriginalURL,
 	)
 }
 
@@ -104,11 +124,9 @@ func (h *URLHandler) Get(c *gin.Context) {
 
 	if err != nil {
 
-		c.JSON(
-			http.StatusNotFound,
-			dto.ErrorResponse{
-				Error: "url not found",
-			},
+		apperrors.NotFound(
+			c,
+			"url not found",
 		)
 
 		return

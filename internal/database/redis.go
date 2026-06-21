@@ -2,7 +2,7 @@ package database
 
 import (
 	"context"
-	"fmt"
+	"log/slog"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -20,7 +20,7 @@ func NewRedis(redisURL string) (*redis.Client, error) {
 		return nil, err
 	}
 
-	fmt.Println("redis connected")
+	slog.Info("redis_connected")
 
 	return client, nil
 }

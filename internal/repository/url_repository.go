@@ -7,17 +7,17 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type URLRepository struct {
+type PostgresURLRepository struct {
 	db *pgxpool.Pool
 }
 
-func NewURLRepository(db *pgxpool.Pool) *URLRepository {
-	return &URLRepository{
+func NewURLRepository(db *pgxpool.Pool) *PostgresURLRepository {
+	return &PostgresURLRepository{
 		db: db,
 	}
 }
 
-func (r *URLRepository) Create(ctx context.Context, url *model.URL) error {
+func (r *PostgresURLRepository) Create(ctx context.Context, url *model.URL) error {
 
 	query := `
 	INSERT INTO urls (
@@ -41,7 +41,7 @@ func (r *URLRepository) Create(ctx context.Context, url *model.URL) error {
 	)
 }
 
-func (r *URLRepository) UpdateShortCode(
+func (r *PostgresURLRepository) UpdateShortCode(
 	ctx context.Context,
 	id int64,
 	shortCode string,
@@ -63,7 +63,46 @@ func (r *URLRepository) UpdateShortCode(
 	return err
 }
 
-func (r *URLRepository) GetByShortCode(
+func (r *PostgresURLRepository) GetByID(
+	ctx context.Context,
+	id int64,
+) (*model.URL, error) {
+
+	var url model.URL
+
+	query := `
+	SELECT
+		id,
+		original_url,
+		short_code,
+		click_count,
+		created_at,
+		updated_at
+	FROM urls
+	WHERE id = $1
+	`
+
+	err := r.db.QueryRow(
+		ctx,
+		query,
+		id,
+	).Scan(
+		&url.ID,
+		&url.OriginalURL,
+		&url.ShortCode,
+		&url.ClickCount,
+		&url.CreatedAt,
+		&url.UpdatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &url, nil
+}
+
+func (r *PostgresURLRepository) GetByShortCode(
 	ctx context.Context,
 	shortCode string,
 ) (*model.URL, error) {
@@ -102,7 +141,7 @@ func (r *URLRepository) GetByShortCode(
 	return &url, nil
 }
 
-func (r *URLRepository) IncrementClickCount(
+func (r *PostgresURLRepository) IncrementClickCount(
 	ctx context.Context,
 	shortCode string,
 ) error {
