@@ -1,0 +1,73 @@
+/* ==========================
+   KPI CARDS
+========================== */
+
+.analytics-cards-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(240px, 1fr)
+    );
+
+  gap: 20px;
+}
+
+.analytics-kpi-card {
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 20px;
+
+  padding: 24px;
+
+  box-shadow:
+    0 4px 20px
+    rgba(0,0,0,0.04);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.analytics-kpi-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 30px
+    rgba(0,0,0,0.08);
+}
+
+.kpi-label {
+  display: block;
+
+  color: #6b7280;
+
+  font-size: 0.875rem;
+
+  font-weight: 600;
+
+  margin-bottom: 16px;
+}
+
+.kpi-value {
+  font-size: 3rem;
+
+  font-weight: 800;
+
+  color: #111827;
+
+  line-height: 1;
+
+  margin-bottom: 12px;
+}
+
+.kpi-description {
+  color: #6b7280;
+
+  font-size: 0.9rem;
+
+  margin: 0;
+}

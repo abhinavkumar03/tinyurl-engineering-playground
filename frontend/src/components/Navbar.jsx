@@ -1,40 +1,90 @@
 import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 
 export default function Navbar() {
   const location = useLocation();
+
+  const [mobileOpen, setMobileOpen] =
+    useState(false);
+
+  const navItems = [
+    {
+      label: "Home",
+      path: "/",
+    },
+    {
+      label: "Dashboard",
+      path: "/dashboard",
+    },
+  ];
 
   const isActive = (path) =>
     location.pathname === path;
 
   return (
-    <nav className="navbar">
-      <div className="navbar-brand">
-        TinyURL
-      </div>
+    <header className="navbar">
+      <div className="navbar-container">
 
-      <div className="navbar-links">
         <Link
           to="/"
-          className={
-            isActive("/")
-              ? "active"
-              : ""
-          }
+          className="navbar-logo"
         >
-          Home
+          <div className="logo-title">
+            TinyURL
+          </div>
+
+          <div className="logo-subtitle">
+            Engineering Playground
+          </div>
         </Link>
 
-        <Link
-          to="/dashboard"
-          className={
-            isActive("/dashboard")
-              ? "active"
-              : ""
+        <nav className="desktop-nav">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`nav-link ${
+                isActive(item.path)
+                  ? "nav-link-active"
+                  : ""
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <button
+          className="mobile-menu-btn"
+          onClick={() =>
+            setMobileOpen(!mobileOpen)
           }
         >
-          Dashboard
-        </Link>
+          ☰
+        </button>
+
       </div>
-    </nav>
+
+      {mobileOpen && (
+        <div className="mobile-nav">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() =>
+                setMobileOpen(false)
+              }
+              className={`mobile-nav-link ${
+                isActive(item.path)
+                  ? "nav-link-active"
+                  : ""
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </header>
   );
 }

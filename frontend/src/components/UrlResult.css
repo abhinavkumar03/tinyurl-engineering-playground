@@ -1,0 +1,167 @@
+/* ==========================
+   URL RESULT
+========================== */
+
+.success-card {
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 20px;
+
+  padding: 24px;
+
+  box-shadow:
+    0 10px 30px
+    rgba(0,0,0,0.05);
+}
+
+.success-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  margin-bottom: 24px;
+}
+
+.success-icon {
+  width: 52px;
+
+  height: 52px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #dcfce7;
+
+  color: #16a34a;
+
+  font-weight: 700;
+
+  font-size: 1.25rem;
+}
+
+.success-header h3 {
+  margin: 0;
+}
+
+.success-header p {
+  margin-top: 4px;
+
+  color: #6b7280;
+}
+
+.short-url-section,
+.original-url-section {
+  margin-bottom: 20px;
+}
+
+.short-url-section label,
+.original-url-section label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 0.875rem;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.short-url-box {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 16px;
+
+  background: #f9fafb;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+}
+
+.short-url-box a {
+  color: #2563eb;
+
+  text-decoration: none;
+
+  word-break: break-all;
+
+  flex: 1;
+}
+
+.copy-btn {
+  border: none;
+
+  background: #2563eb;
+
+  color: white;
+
+  padding: 10px 16px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.original-url-box {
+  padding: 14px;
+
+  background: #f9fafb;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  color: #4b5563;
+
+  word-break: break-word;
+}
+
+.result-actions {
+  margin-top: 24px;
+
+  display: flex;
+
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+
+  .short-url-box {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .copy-btn {
+    width: 100%;
+  }
+
+  .result-actions {
+    justify-content: stretch;
+  }
+
+  .result-actions .primary-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

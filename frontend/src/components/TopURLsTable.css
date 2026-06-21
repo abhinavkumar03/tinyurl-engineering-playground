@@ -1,0 +1,176 @@
+/* ==========================
+   ANALYTICS TABLE
+========================== */
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.analytics-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.analytics-table th {
+  text-align: left;
+
+  padding: 16px;
+
+  font-size: 0.875rem;
+
+  color: #6b7280;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.analytics-table td {
+  padding: 18px 16px;
+
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.analytics-table tr:hover {
+  background: #fafafa;
+}
+
+.code-pill {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 42px;
+
+  height: 32px;
+
+  border-radius: 999px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-weight: 700;
+
+  font-size: 0.875rem;
+}
+
+.url-cell {
+  color: #374151;
+
+  text-decoration: none;
+
+  display: block;
+
+  max-width: 450px;
+
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.url-cell:hover {
+  color: #2563eb;
+}
+
+.click-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 60px;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  background: #f3f4f6;
+
+  font-weight: 600;
+}
+
+.table-action-btn {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-decoration: none;
+
+  border-radius: 10px;
+
+  background: #2563eb;
+
+  color: white;
+
+  padding: 10px 14px;
+
+  font-size: 0.875rem;
+
+  font-weight: 600;
+
+  transition: all 0.2s ease;
+}
+
+.table-action-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* ==========================
+   MOBILE CARDS
+========================== */
+
+.mobile-url-list {
+  display: none;
+}
+
+.mobile-url-card {
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 16px;
+
+  padding: 16px;
+
+  margin-bottom: 16px;
+}
+
+.mobile-url-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 12px;
+}
+
+.mobile-url-link {
+  display: block;
+
+  margin-bottom: 16px;
+
+  color: #374151;
+
+  text-decoration: none;
+
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+
+  .table-wrapper {
+    display: none;
+  }
+
+  .mobile-url-list {
+    display: block;
+  }
+}

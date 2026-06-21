@@ -1,47 +1,107 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
 function UrlResult({ result }) {
+  const [copied, setCopied] =
+    useState(false);
+
   if (!result) {
     return null;
   }
 
   const copy = async () => {
-    await navigator.clipboard.writeText(
-      result.short_url
-    );
+    try {
+      await navigator.clipboard.writeText(
+        result.short_url
+      );
 
-    alert("Copied");
+      setCopied(true);
+
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+
+    } catch {
+      console.error(
+        "Failed to copy URL"
+      );
+    }
   };
 
   return (
-    <div className="result-card">
-      <h3>Short URL Created</h3>
+    <div className="success-card">
 
-      <p>
-        <strong>Original:</strong>
-      </p>
+      <div className="success-header">
 
-      <a
-        href={result.original_url}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {result.original_url}
-      </a>
+        <div className="success-icon">
+          ✓
+        </div>
 
-      <p>
-        <strong>Short URL:</strong>
-      </p>
+        <div>
+          <h3>
+            URL Created Successfully
+          </h3>
 
-      <a
-        href={result.short_url}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {result.short_url}
-      </a>
+          <p>
+            Your shortened link is
+            ready to share.
+          </p>
+        </div>
 
-      <button onClick={copy}>
-        Copy URL
-      </button>
+      </div>
+
+      <div className="short-url-section">
+
+        <label>
+          Short URL
+        </label>
+
+        <div className="short-url-box">
+
+          <a
+            href={result.short_url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {result.short_url}
+          </a>
+
+          <button
+            onClick={copy}
+            className="copy-btn"
+          >
+            {copied
+              ? "Copied!"
+              : "Copy"}
+          </button>
+
+        </div>
+
+      </div>
+
+      <div className="original-url-section">
+
+        <label>
+          Original URL
+        </label>
+
+        <div className="original-url-box">
+          {result.original_url}
+        </div>
+
+      </div>
+
+      <div className="result-actions">
+
+        <Link
+          to={`/analytics/${result.short_code}`}
+          className="primary-btn"
+        >
+          View Analytics
+        </Link>
+
+      </div>
+
     </div>
   );
 }
