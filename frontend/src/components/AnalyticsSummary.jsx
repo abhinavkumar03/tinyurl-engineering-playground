@@ -1,29 +1,62 @@
 export default function AnalyticsSummary({
   analytics,
 }) {
+  const details = [
+    {
+      label: "Short Code",
+      value: analytics.short_code,
+    },
+    {
+      label: "Total Clicks",
+      value: analytics.total_clicks,
+    },
+    {
+      label: "Unique Visitors",
+      value: analytics.unique_visitors,
+    },
+    {
+      label: "Tracking Status",
+      value: "Active",
+    },
+  ];
+
   return (
-    <div className="border rounded p-4">
-      <h2>
-        URL Analytics
-      </h2>
+    <div className="url-details-card">
 
-      <p>
-        Short Code:
-        {" "}
-        {analytics.short_code}
-      </p>
+      <div className="url-details-header">
 
-      <p>
-        Total Clicks:
-        {" "}
-        {analytics.total_clicks}
-      </p>
+        <h2>
+          URL Details
+        </h2>
 
-      <p>
-        Unique Visitors:
-        {" "}
-        {analytics.unique_visitors}
-      </p>
+        <p>
+          Metadata for the selected
+          shortened URL.
+        </p>
+
+      </div>
+
+      <div className="details-list">
+
+        {details.map((item) => (
+          <div
+            key={item.label}
+            className="details-row"
+          >
+
+            <span className="details-label">
+              {item.label}
+            </span>
+
+            <span className="details-value">
+              {item.value}
+            </span>
+
+          </div>
+        ))}
+
+      </div>
+
     </div>
   );
 }

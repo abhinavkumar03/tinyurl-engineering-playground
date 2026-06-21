@@ -1,0 +1,49 @@
+/* ==========================
+   URL DETAILS
+========================== */
+
+.url-details-card {
+  width: 100%;
+}
+
+.url-details-header {
+  margin-bottom: 24px;
+}
+
+.url-details-header h2 {
+  margin-bottom: 8px;
+}
+
+.url-details-header p {
+  color: #6b7280;
+}
+
+.details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.details-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 16px 0;
+
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.details-label {
+  color: #6b7280;
+
+  font-size: 0.95rem;
+}
+
+.details-value {
+  font-weight: 600;
+
+  color: #111827;
+}

@@ -2,23 +2,41 @@ export default function AnalyticsCards({
   totalClicks,
   uniqueVisitors,
 }) {
+  const cards = [
+    {
+      title: "Total Clicks",
+      value: totalClicks,
+      description:
+        "All tracked visits",
+    },
+    {
+      title: "Unique Visitors",
+      value: uniqueVisitors,
+      description:
+        "Distinct visitors",
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <div className="border rounded p-4">
-        <h3>Total Clicks</h3>
+    <div className="analytics-cards-grid">
+      {cards.map((card) => (
+        <div
+          key={card.title}
+          className="analytics-kpi-card"
+        >
+          <span className="kpi-label">
+            {card.title}
+          </span>
 
-        <p className="text-3xl font-bold">
-          {totalClicks}
-        </p>
-      </div>
+          <h2 className="kpi-value">
+            {card.value}
+          </h2>
 
-      <div className="border rounded p-4">
-        <h3>Unique Visitors</h3>
-
-        <p className="text-3xl font-bold">
-          {uniqueVisitors}
-        </p>
-      </div>
+          <p className="kpi-description">
+            {card.description}
+          </p>
+        </div>
+      ))}
     </div>
   );
 }
