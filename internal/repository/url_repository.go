@@ -63,6 +63,45 @@ func (r *PostgresURLRepository) UpdateShortCode(
 	return err
 }
 
+func (r *PostgresURLRepository) GetByID(
+	ctx context.Context,
+	id int64,
+) (*model.URL, error) {
+
+	var url model.URL
+
+	query := `
+	SELECT
+		id,
+		original_url,
+		short_code,
+		click_count,
+		created_at,
+		updated_at
+	FROM urls
+	WHERE id = $1
+	`
+
+	err := r.db.QueryRow(
+		ctx,
+		query,
+		id,
+	).Scan(
+		&url.ID,
+		&url.OriginalURL,
+		&url.ShortCode,
+		&url.ClickCount,
+		&url.CreatedAt,
+		&url.UpdatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &url, nil
+}
+
 func (r *PostgresURLRepository) GetByShortCode(
 	ctx context.Context,
 	shortCode string,

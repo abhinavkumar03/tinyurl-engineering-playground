@@ -18,6 +18,11 @@ type URLRepository interface {
 		shortCode string,
 	) error
 
+	GetByID(
+		ctx context.Context,
+		id int64,
+	) (*model.URL, error)
+
 	GetByShortCode(
 		ctx context.Context,
 		shortCode string,
