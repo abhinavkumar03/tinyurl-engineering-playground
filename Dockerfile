@@ -47,7 +47,7 @@ COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=builder /app/tinyurl /tinyurl
 COPY --from=builder /app/migrate /migrate
 
-COPY --from=builder /app/internal/migration /internal/migration
+COPY --from=builder /app/internal/migrations /internal/migrations
 
 USER nonroot:nonroot
 
