@@ -1,33 +1,12 @@
-version: "3.9"
-
 services:
 
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-
-    container_name: tinyurl-api
-
-    ports:
-      - "8080:8080"
-
-    env_file:
-      - .env
-
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-      redis:
-        condition: service_healthy
-
-    restart: unless-stopped
-
   postgres:
-    image: postgres:17-alpine
+
+    image: postgres:16
 
     container_name: tinyurl-postgres
+
+    restart: unless-stopped
 
     environment:
       POSTGRES_DB: tinyurl
@@ -44,26 +23,29 @@ services:
       test:
         [
           "CMD-SHELL",
-          "pg_isready -U postgres -d tinyurl"
+          "pg_isready -U postgres"
         ]
       interval: 10s
       timeout: 5s
       retries: 5
 
-    restart: unless-stopped
-
   redis:
-    image: redis:8-alpine
+
+    image: redis:7-alpine
 
     container_name: tinyurl-redis
+
+    restart: unless-stopped
 
     ports:
       - "6379:6379"
 
     command:
-      - redis-server
-      - --appendonly
-      - "yes"
+      [
+        "redis-server",
+        "--appendonly",
+        "yes"
+      ]
 
     volumes:
       - redis_data:/data
@@ -79,8 +61,30 @@ services:
       timeout: 5s
       retries: 5
 
+  api:
+
+    build:
+      context: .
+
+    container_name: tinyurl-api
+
     restart: unless-stopped
 
+    env_file:
+      - .env
+
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_healthy
+
 volumes:
+
   postgres_data:
+
   redis_data:
