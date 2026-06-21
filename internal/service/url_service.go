@@ -60,6 +60,7 @@ func (s *URLServiceImpl) Create(
 func (s *URLServiceImpl) Resolve(
 	ctx context.Context,
 	shortCode string,
+	metadata model.EventMetadata,
 ) (string, error) {
 
 	cacheKey := "url:" + shortCode

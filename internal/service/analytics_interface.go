@@ -6,19 +6,19 @@ import (
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/model"
 )
 
-type URLService interface {
-	Create(
+type AnalyticsService interface {
+	Track(
 		ctx context.Context,
-		originalURL string,
-	) (*model.URL, error)
+		event *model.URLEvent,
+	) error
 
-	Resolve(
+	GetTotalClicks(
 		ctx context.Context,
 		shortCode string,
-	) (string, error)
+	) (int64, error)
 
-	Get(
+	GetUniqueVisitors(
 		ctx context.Context,
 		shortCode string,
-	) (*model.URL, error)
+	) (int64, error)
 }

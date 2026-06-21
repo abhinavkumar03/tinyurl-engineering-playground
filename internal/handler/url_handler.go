@@ -5,6 +5,7 @@ import (
 
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/dto"
 	apperrors "github.com/abhinavkumar03/tinyurl-engineering-playground/internal/errors"
+	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/model"
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/service"
 	"github.com/gin-gonic/gin"
 )
@@ -68,10 +69,15 @@ func (h *URLHandler) Create(c *gin.Context) {
 func (h *URLHandler) Redirect(c *gin.Context) {
 
 	shortCode := c.Param("shortCode")
-
+	ctx := c.Request.Context()
 	url, err := h.service.Resolve(
-		c.Request.Context(),
+		ctx,
 		shortCode,
+		model.EventMetadata{
+			IPAddress: c.ClientIP(),
+			UserAgent: c.Request.UserAgent(),
+			Referrer:  c.Request.Referer(),
+		},
 	)
 
 	if err != nil {
