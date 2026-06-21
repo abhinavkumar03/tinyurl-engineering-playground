@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/dto"
+	apperrors "github.com/abhinavkumar03/tinyurl-engineering-playground/internal/errors"
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/service"
 	"github.com/gin-gonic/gin"
 )
@@ -30,11 +31,9 @@ func (h *URLHandler) Create(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&request); err != nil {
 
-		c.JSON(
-			http.StatusBadRequest,
-			dto.ErrorResponse{
-				Error: err.Error(),
-			},
+		apperrors.BadRequest(
+			c,
+			err.Error(),
 		)
 
 		return
@@ -47,11 +46,9 @@ func (h *URLHandler) Create(c *gin.Context) {
 
 	if err != nil {
 
-		c.JSON(
-			http.StatusInternalServerError,
-			dto.ErrorResponse{
-				Error: err.Error(),
-			},
+		apperrors.Internal(
+			c,
+			"failed to create short url",
 		)
 
 		return
@@ -78,11 +75,9 @@ func (h *URLHandler) Redirect(c *gin.Context) {
 	)
 
 	if err != nil {
-		c.JSON(
-			http.StatusNotFound,
-			dto.ErrorResponse{
-				Error: "url not found",
-			},
+		apperrors.NotFound(
+			c,
+			"url not found",
 		)
 		return
 	}
@@ -104,11 +99,9 @@ func (h *URLHandler) Get(c *gin.Context) {
 
 	if err != nil {
 
-		c.JSON(
-			http.StatusNotFound,
-			dto.ErrorResponse{
-				Error: "url not found",
-			},
+		apperrors.NotFound(
+			c,
+			"url not found",
 		)
 
 		return
