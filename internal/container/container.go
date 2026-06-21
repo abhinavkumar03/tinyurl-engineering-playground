@@ -18,7 +18,8 @@ type Container struct {
 	Postgres *pgxpool.Pool
 	Redis    *redis.Client
 
-	URLHandler *handler.URLHandler
+	URLHandler    *handler.URLHandler
+	HealthHandler *handler.HealthHandler
 }
 
 func Build() (*Container, error) {
@@ -63,10 +64,21 @@ func Build() (*Container, error) {
 		cfg.BaseURL,
 	)
 
+	healthService := service.NewHealthService(
+		pg,
+		redisClient,
+		"1.0.0",
+	)
+
+	healthHandler := handler.NewHealthHandler(
+		healthService,
+	)
+
 	return &Container{
-		Config:     cfg,
-		Postgres:   pg,
-		Redis:      redisClient,
-		URLHandler: urlHandler,
+		Config:        cfg,
+		Postgres:      pg,
+		Redis:         redisClient,
+		URLHandler:    urlHandler,
+		HealthHandler: healthHandler,
 	}, nil
 }

@@ -1,9 +1,6 @@
 package router
 
 import (
-	"net/http"
-
-	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/dto"
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/handler"
 	"github.com/abhinavkumar03/tinyurl-engineering-playground/internal/middleware"
 	"github.com/gin-contrib/cors"
@@ -12,6 +9,7 @@ import (
 
 func Setup(
 	urlHandler *handler.URLHandler,
+	healthHandler *handler.HealthHandler,
 	frontendURLs []string,
 ) *gin.Engine {
 
@@ -43,19 +41,9 @@ func Setup(
 		AllowCredentials: true,
 	}))
 
-	r.GET(
-		"/health",
-		func(c *gin.Context) {
-			c.JSON(
-				http.StatusOK,
-				dto.HealthResponse{
-					Status:   "healthy",
-					Postgres: "up",
-					Redis:    "up",
-				},
-			)
-		},
-	)
+	r.GET("/health", healthHandler.Health)
+	r.GET("/ready", healthHandler.Readiness)
+	r.GET("/live", healthHandler.Liveness)
 
 	v1 := r.Group("/api/v1")
 

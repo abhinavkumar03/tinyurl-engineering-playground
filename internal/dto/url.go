@@ -22,9 +22,3 @@ type ErrorResponse struct {
 	Code    string `json:"code"`
 	Message string `json:"message"`
 }
-
-type HealthResponse struct {
-	Status   string `json:"status"`
-	Postgres string `json:"postgres"`
-	Redis    string `json:"redis"`
-}
